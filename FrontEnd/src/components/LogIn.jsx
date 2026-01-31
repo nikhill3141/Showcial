@@ -23,7 +23,7 @@ function LogIn() {
     e.preventDefault()
     setLoading(true)
     try {
-      const res = await axios.post('https://insta-clone-made-by-nik.onrender.com/api/v1/user/login',input,
+      const res = await axios.post('https://insta-clone-td88.onrender.com/api/v1/user/login',input,
         {
         headers:{'content-type':'application/json'}, 
         withCredentials: true
