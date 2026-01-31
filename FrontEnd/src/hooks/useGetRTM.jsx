@@ -3,17 +3,22 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useGetRTM = () => {
-    const dispatch = useDispatch();
-    const { socket } = useSelector(store => store.socketio);
-    const { messages } = useSelector(store => store.chat);
-    useEffect(() => {
-        socket?.on('newMessage', (newMessage) => {
-            dispatch(setMessages([...messages, newMessage]));
-        })
+  const dispatch = useDispatch();
+  const { socket } = useSelector(store => store.socketio);
 
-        return () => {
-            socket?.off('newMessage');
-        }
-    }, [messages, setMessages]);
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewMessage = (newMessage) => {
+      dispatch(setMessages(prev => [...prev, newMessage]));
+    };
+
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, [socket, dispatch]);
 };
+
 export default useGetRTM;
