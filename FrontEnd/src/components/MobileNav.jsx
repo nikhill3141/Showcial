@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, User, MessageCircle, PlusSquare } from "lucide-react";
 import { useSelector } from "react-redux";
+import CreatePost from "./CreatePost";
 
 function MobileNav() {
   const location = useLocation();
