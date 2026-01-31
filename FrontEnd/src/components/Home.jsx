@@ -1,6 +1,8 @@
 import useGetAllPost from "@/hooks/useGetAllPost";
 import MobileNav from "./MobileNav";
 import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
+import RightSidebar from "./RightSidebar";
+import Feed from "./Feed";
 
 function Home() {
   useGetAllPost()
@@ -15,12 +17,12 @@ function Home() {
 
       {/* Main content */}
       <div className="flex-grow">
-        <Feed />
-        <Outlet />
+        <Feed/>
+        <Outlet/>
       </div>
 
       {/* Mobile navigation */}
-      <MobileNav />
+      <MobileNav/>
     </div>
   )
 }
