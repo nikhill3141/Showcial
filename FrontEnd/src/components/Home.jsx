@@ -1,17 +1,17 @@
+import React from "react";
+import Feed from "./Feed";
+import useGetAllPost from "@/hooks/useGetAllPost";
+import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
 
-import { Outlet } from 'react-router-dom'
+function Home() {
+  useGetAllPost();
+  useGetSuggestedUsers();
 
-const Home = () => {
   return (
-    <div className="flex min-h-screen">
-
-      {/* Page content */}
-      <div className="flex-1 md:ml-[16%] pb-16 md:pb-0">
-        <Outlet />
-      </div>
-
+    <div className="flex justify-center">
+      <Feed />
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
