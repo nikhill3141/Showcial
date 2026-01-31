@@ -10,14 +10,13 @@ function MobileNav() {
   const [open, setOpen] = useState(false);
 
 
-  function handleOnClick() {
-
+  const handleOnClick = () => {
     return setOpen(true);
-  }
+  };
 
   const navItems = [
     { name: "Home", icon: <Home size={24} />, path: "/" },
-    { name: "Create Post", icon: <PlusSquare size={24} />, onclick: handleOnClick()},
+    { name: "Create Post", icon: <PlusSquare size={24} />, onclick: handleOnClick},
     { name: "Messages", icon: <MessageCircle size={24} />, path: "/chat" },
     { name: "Profile", icon: <User size={24} />, path: `/profile/${user?._id}` },
   ];
