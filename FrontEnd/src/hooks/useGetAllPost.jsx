@@ -1,34 +1,24 @@
-import { setPosts, setSelectedPost } from "@/redux/postSlice.js";
-import axios from "axios";
+import { setMessages } from "@/redux/chatSlice";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-const useGetAllPost = () => {
+const useGetRTM = () => {
   const dispatch = useDispatch();
+  const { socket } = useSelector(store => store.socketio);
+
   useEffect(() => {
-   
-      const fetchAllPost = async () => {
-       
-        try {
-          const res = await axios.get("https://insta-clone-td88.onrender.com/api/v1/post/all", {
-            withCredentials: true,
-          });
-  
-          if (res.data.success) {
-            // console.log(res.data.posts);
-            dispatch(setPosts(res.data.posts));
-           
-          }
-          
-        } catch (error) {
-          console.log(error);
-          
-        } 
-        
-      }
-      fetchAllPost();
-    
-  }, [ ]);
+    if (!socket) return;
+
+    const handleNewMessage = (newMessage) => {
+      dispatch(setMessages(prev => [...prev, newMessage]));
+    };
+
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, [socket, dispatch]);
 };
 
-export default useGetAllPost;
+export default useGetRTM;
