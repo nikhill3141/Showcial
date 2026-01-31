@@ -3,6 +3,7 @@ import MobileNav from "./MobileNav";
 import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
 import RightSidebar from "./RightSidebar";
 import Feed from "./Feed";
+import { Outlet } from "react-router-dom";  
 
 function Home() {
   useGetAllPost()
