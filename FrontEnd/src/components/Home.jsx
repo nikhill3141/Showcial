@@ -1,20 +1,24 @@
-import React from "react";
-import Feed from "./Feed";
-import RightSidebar from "./RightSidebar";
-import useGetAllPost from "@/hooks/useGetAllPost";
-import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
+import MobileNav from "./MobileNav";
 
 function Home() {
-  useGetAllPost();
-  useGetSuggestedUsers();
+  useGetAllPost()
+  useGetSuggestedUsers()
 
   return (
-    <div className="flex flex-col md:flex-row gap-6">
-      <div className="flex-1">
-        <Feed />
+    <div className="flex ">
+      {/* Desktop sidebar */}
+      <div className="hidden md:block">
+        <RightSidebar />
       </div>
-    </div>
-  );
-}
 
-export default Home;
+      {/* Main content */}
+      <div className="flex-grow">
+        <Feed />
+        <Outlet />
+      </div>
+
+      {/* Mobile navigation */}
+      <MobileNav />
+    </div>
+  )
+}
