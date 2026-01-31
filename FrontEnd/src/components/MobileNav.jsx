@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, User, MessageCircle, PlusSquare } from "lucide-react";
 import { useSelector } from "react-redux";
