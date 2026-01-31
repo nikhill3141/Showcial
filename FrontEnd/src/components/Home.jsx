@@ -1,30 +1,28 @@
-import useGetAllPost from "@/hooks/useGetAllPost";
-import MobileNav from "./MobileNav";
-import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
-import RightSidebar from "./RightSidebar";
-import Feed from "./Feed";
-import { Outlet } from "react-router-dom";  
+import LeftSidebar from './LeftSidebar'
+import MobileNav from './MobileNav'
+import { Outlet } from 'react-router-dom'
 
-function Home() {
-  useGetAllPost()
-  useGetSuggestedUsers()
-
+const Home = () => {
   return (
-    <div className="flex ">
-      {/* Desktop sidebar */}
-      <div className="hidden md:block">
-        <RightSidebar />
+    <div className="flex min-h-screen">
+
+      {/* Desktop Sidebar */}
+      <div className="hidden md:block w-[16%] fixed h-screen">
+        <LeftSidebar />
       </div>
 
-      {/* Main content */}
-      <div className="flex-grow">
-        <Feed/>
-        <Outlet/>
+      {/* Page content */}
+      <div className="flex-1 md:ml-[16%] pb-16 md:pb-0">
+        <Outlet />
       </div>
 
-      {/* Mobile navigation */}
-      <MobileNav/>
+      {/* Mobile bottom navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
+        <MobileNav />
+      </div>
+
     </div>
   )
 }
-export default Home;
+
+export default Home
