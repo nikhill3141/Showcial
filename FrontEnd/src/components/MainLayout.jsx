@@ -9,7 +9,7 @@ function MainLayout() {
     <div className="flex min-h-screen">
       
       {/* Left Sidebar (desktop only) */}
-      <div className="hidden md:block w-[16%]  left-0 top-0 h-full">
+      <div className="hidden md:block w-[16%] fixed left-0 top-0 h-full">
         <LeftSidebar />
       </div>
 
@@ -19,7 +19,7 @@ function MainLayout() {
       </main>
 
       {/* Right Sidebar (desktop only) */}
-      <div className="hidden lg:block w-[20%] right-0 top-0 h-full">
+      <div className="hidden lg:block w-[20%] fixed right-0 top-0 h-full">
         <RightSidebar />
       </div>
 
