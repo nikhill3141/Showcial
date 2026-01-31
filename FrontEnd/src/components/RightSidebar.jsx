@@ -1,38 +1,29 @@
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import SuggestedUsers from "./SuggestedUsers";
 
 function RightSidebar() {
-  const { user } = useSelector((store) => store.auth);
-  // console.log(user);
-  
-  return (
-    <>
-      <div className="w-fit my-10 pr-32">
-        <div className="flex items-center gap-3">
-          <Link to={`/profile/${user?._id}`}>
-            <Avatar>
-              <AvatarImage>{user?.profilePicture}</AvatarImage>
-              <AvatarFallback>Nik</AvatarFallback>
-            </Avatar>
-          </Link>
+  const { user } = useSelector(store => store.auth);
 
-          <div>
-            <Link to={`/profile/${user?._id}`}>
-              <h1 className="font-semibold">{user?.username}</h1>
-            </Link>
-            <p className="text-gray-600">
-              {user?.bio || "im the full stack devlopers"}
-            </p>
-          </div>
+  return (
+    <aside className="hidden lg:flex flex-col w-80 px-4 py-6 border-l bg-white fixed right-0 top-0 h-full overflow-y-auto">
+      {/* Current User */}
+      <Link to={`/profile/${user?._id}`} className="flex items-center gap-3 mb-6">
+        <Avatar>
+          <AvatarImage src={user?.profilePicture} />
+          <AvatarFallback>NN</AvatarFallback>
+        </Avatar>
+        <div>
+          <h1 className="font-semibold">{user?.username}</h1>
+          <p className="text-gray-500 text-sm">{user?.bio || "Full Stack Developer"}</p>
         </div>
-        <div >
-          <SuggestedUsers />
-        </div>
-      </div>
-    </>
+      </Link>
+
+      {/* Suggested Users */}
+      <SuggestedUsers />
+    </aside>
   );
 }
 

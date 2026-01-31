@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import {
-
-  Bookmark,
-  BookmarkCheck,
-  Heart,
-  MessageCircle,
-  MoreVertical,
-  Send,
-} from "lucide-react";
+import { Heart, MessageCircle, MoreVertical, Bookmark, BookmarkCheck, Send } from "lucide-react";
 import { FaHeart } from "react-icons/fa";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Button } from "./ui/button";
@@ -22,227 +14,70 @@ import { Badge } from "./ui/badge";
 function Post({ post }) {
   const [text, setText] = useState("");
   const [open, setOpen] = useState(false);
-  const { user } = useSelector((store) => store.auth);
-  const { posts } = useSelector((store) => store.post);
+  const { user } = useSelector(store => store.auth);
+  const { posts } = useSelector(store => store.post);
   const dispatch = useDispatch();
-  const [liked, SetLiked] = useState(post.likes.includes(user?._id) || false);
+  const [liked, setLiked] = useState(post.likes.includes(user?._id));
   const [postLikeCount, setPostLikeCount] = useState(post.likes.length);
-  const [comments, setComment] = useState(post.comments);
-  const [bookmarked,setBookmarked] = useState()
+  const [comments, setComments] = useState(post.comments);
+  const [bookmarked, setBookmarked] = useState(false);
 
-  const handleChange = (e) => {
-    const inputText = e.target.value;
-    if (inputText.trim()) {
-      setText(inputText);
-    } else {
-      setText("");
-    }
-  };
-  const handleLikeDislike = async () => {
+  const handleLike = async () => {
     try {
       const action = liked ? "dislike" : "like";
-      const res = await axios.get(
-        `https://insta-clone-td88.onrender.com/api/v1/post/${post._id}/${action}`,
-        { withCredentials: true }
-      );
-
+      const res = await axios.get(`https://insta-clone-td88.onrender.com/api/v1/post/${post._id}/${action}`, { withCredentials: true });
       if (res.data.success) {
-        const updatedLikes = liked ? postLikeCount - 1 : postLikeCount + 1;
-        setPostLikeCount(updatedLikes);
-        toast(res.data.message);
-        SetLiked(!liked);
-        //redux store mai post likes ko update karna padega\
-        const updatedPostData = posts.map((p) =>
-          p._id === post._id
-            ? {
-                ...p,
-                likes: liked
-                  ? p.likes.filter((id) => id != user._id)
-                  : [...p.likes, user._id],
-              }
-            : p
+        setPostLikeCount(liked ? postLikeCount - 1 : postLikeCount + 1);
+        setLiked(!liked);
+        const updatedPosts = posts.map(p => p._id === post._id
+          ? { ...p, likes: liked ? p.likes.filter(id => id !== user._id) : [...p.likes, user._id] }
+          : p
         );
-        dispatch(setPosts(updatedPostData));
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-    }
-  };
-
-  const deletePostHandler = async (req, res) => {
-    try {
-      const res = await axios.delete(
-        `https://insta-clone-td88.onrender.com/api/v1/post/delete/${post?._id}`,
-        { withCredentials: true }
-      );
-
-      if (res.data.success) {
-        const updatedPosts = posts.filter(
-          (postItem) => postItem?._id !== post._id
-        );
-        toast.success(res.data.message);
         dispatch(setPosts(updatedPosts));
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Error liking post");
     }
   };
-
-  const commentHandler = async () => {
-    try {
-      const res = await axios.post(
-        `https://insta-clone-td88.onrender.com/api/v1/post/${post._id}/comment`,
-        { text },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
-      if (res.data.success) {
-        toast(res.data.message);
-        const updatedCommentPost = [...comments, res.data.comment];
-        setComment(updatedCommentPost);
-
-        const updatedPost = posts.map((p) =>
-          p._id === post._id
-            ? {
-                ...p,
-                comments: updatedCommentPost,
-              }
-            : p
-        );
-        dispatch(setPosts(updatedPost));
-        setText("");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-    }
-  };
-
-  const handleBookmark = async () => {
-    try {
-    const res = await axios.get(`https://insta-clone-td88.onrender.com/api/v1/post/${post?._id}/bookmark`,{withCredentials:true})
-      if(res.data.success){
-        toast(res.data.message)
-        res.data.type === 'saved' ? setBookmarked(true):setBookmarked(false)
-      }
-    } catch (error) {
-      console.log(error);
-      
-    }
-  }
 
   return (
-    <div className="main-layout-post my-8 w-full max-w-sm mx-auto ">
-      <div className="flex  items-center justify-between">
-        {/* user heading */}
-        <div className="user-section flex gap-2 items-center">
-          <Avatar className="">
-            <AvatarImage src={post.author.profilePicture} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <h1 className="font-bold">{post.author.username}</h1>
+    <div className="bg-white shadow-md rounded-lg p-4 w-full max-w-lg mx-auto">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <Avatar><AvatarImage src={post.author.profilePicture} /><AvatarFallback>NN</AvatarFallback></Avatar>
+          <h2 className="font-semibold">{post.author.username}</h2>
           {user?._id === post?.author._id && <Badge variant="secondary">Author</Badge>}
         </div>
         <Dialog>
-          <DialogTrigger asChild>
-            <MoreVertical className="cursor-pointer" />
-          </DialogTrigger>
-          <DialogContent className="flex flex-col items-center">
-            <Button variant="ghost" className="w-fit text-[#ED4956] font-bold">
-              unfollow
-            </Button>
-            <Button variant="ghost" className="w-fit">
-              Add to favorites
-            </Button>
-            {user?._id === post?.author._id ? (
-              <Button
-                variant="ghost"
-                className="w-fit font-bold"
-                onClick={deletePostHandler}
-              >
-                {" "}
-                Delete{" "}
-              </Button>
-            ) : (
-              ""
-            )}
+          <DialogTrigger asChild><MoreVertical className="cursor-pointer" /></DialogTrigger>
+          <DialogContent className="flex flex-col items-start">
+            <Button variant="ghost" className="text-red-600">Delete</Button>
           </DialogContent>
         </Dialog>
       </div>
 
-      {/* post img */}
-      <div className="img-section">
-        <img
-          className="my-2 aspect-square w-full rounded-sm object-cover"
-          src={post.image}
-          alt="post_img"
-        />
-      </div>
+      {/* Post Image */}
+      <img src={post.image} alt="post" className="w-full aspect-square object-cover rounded-lg mb-2" />
 
-      {/* like comments Bookmark */}
-      <div className="cammads flex justify-between my-2">
-        <div className="flex gap-5 items-center  ">
-          {liked ? (
-            <FaHeart
-              onClick={handleLikeDislike}
-              className=" cursor-pointer text-red-600 size-6 ml-2"
-            />
-          ) : (
-            <Heart
-              onClick={handleLikeDislike}
-              className=" cursor-pointer ml-2"
-            />
-          )}
-
-          <MessageCircle
-            onClick={() => {
-              dispatch(setSelectedPost(post));
-              setOpen(true);
-            }}
-            className="hover:text-gray-600 cursor-pointer"
-          />
-          <Send className="hover:text-gray-600 cursor-pointer" />
+      {/* Actions */}
+      <div className="flex justify-between items-center mb-2">
+        <div className="flex gap-4">
+          {liked ? <FaHeart className="text-red-600 cursor-pointer" onClick={handleLike}/> : <Heart className="cursor-pointer" onClick={handleLike}/>}
+          <MessageCircle className="cursor-pointer" onClick={()=>{dispatch(setSelectedPost(post)); setOpen(true)}}/>
+          <Send className="cursor-pointer"/>
         </div>
-        {
-          bookmarked ? (<BookmarkCheck onClick={handleBookmark} />) : (<Bookmark onClick={handleBookmark} className="hover:text-gray-600 cursor-pointer" />)
-        }
-        {/* <Bookmark onClick={handleBookmark} className="hover:text-gray-600 cursor-pointer" /> */}
+        {bookmarked ? <BookmarkCheck className="cursor-pointer" /> : <Bookmark className="cursor-pointer"/>}
       </div>
-      <span className="font-medium mb-2 block">{postLikeCount} Likes</span>
-      <p>
-        <span className="font-medium mr-2">{post.author.username}</span>
-        {post.caption}
-      </p>
-      <span
-        onClick={() => {
-          dispatch(setSelectedPost(post));
-          setOpen(true);
-        }}
-        className="cursor-pointer text-gray-400"
-      >
-         {comments.length == 0 ? '' :`view all ${comments.length}comments`} 
-      </span>
-      {/* add comments */}
-      <CommentDilog open={open} setOpen={setOpen} post={post} />
-      <div className="flex">
-        <input
-          type="text"
-          placeholder="Add the comment... "
-          className="w-full outline-none text-sm"
-          value={text}
-          onChange={handleChange}
-        />
-        {text && (
-          <span onClick={commentHandler} className="text-[#3BADF8] font-bold cursor-pointer">
-            Post
-          </span>
-        )}
+
+      <p className="font-medium">{postLikeCount} Likes</p>
+      <p><span className="font-semibold">{post.author.username}</span> {post.caption}</p>
+
+      <CommentDilog open={open} setOpen={setOpen} post={post}/>
+
+      <div className="flex gap-2 mt-2">
+        <input type="text" value={text} onChange={e=>setText(e.target.value)} placeholder="Add a comment..." className="flex-1 p-2 border rounded"/>
+        {text && <Button size="sm" onClick={()=>{}}>Post</Button>}
       </div>
     </div>
   );

@@ -5,12 +5,17 @@ import RightSidebar from "./RightSidebar";
 
 function MainLayout() {
   return (
-    <div className="">
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Left Sidebar */}
       <LeftSidebar />
-      <div className="">
+
+      {/* Main Content */}
+      <main className="flex-1 px-4 md:px-6 lg:px-12 py-6">
         <Outlet />
-      </div>
-      
+      </main>
+
+      {/* Right Sidebar */}
+      <RightSidebar />
     </div>
   );
 }
