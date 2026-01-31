@@ -1,4 +1,6 @@
+import useGetAllPost from "@/hooks/useGetAllPost";
 import MobileNav from "./MobileNav";
+import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
 
 function Home() {
   useGetAllPost()
