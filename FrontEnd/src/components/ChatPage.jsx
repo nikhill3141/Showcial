@@ -18,6 +18,8 @@ const ChatPage = () => {
 
   const sendMessageHandler = async (receiverId) => {
     try {
+        getRTM();
+        getAllMessage();
       const res = await axios.post(
         `https://insta-clone-td88.onrender.com/api/v1/message/send/${receiverId}`,
         { textMessage },
