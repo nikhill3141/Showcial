@@ -10,8 +10,8 @@ const useGetRTM = () => {
     if (!socket) return;
 
     const handleNewMessage = (newMessage) => {
-      // dispatch(setMessages(prev => [...prev, newMessage]));
-      dispatch(setMessages([...newMessage, newMessage]));
+      dispatch(setMessages(prev => [...prev, newMessage]));
+      // dispatch(setMessages([...newMessage, newMessage]));
     };
 
     socket.on("newMessage", handleNewMessage);
