@@ -28,7 +28,7 @@ const Messages = ({ selectedUser }) => {
 
             {/* Chat messages */}
             <div className='flex flex-col gap-3 flex-1 overflow-y-auto'>
-                {messages && messages.map((msg) => (
+                {messages.map((msg) => (
                     <div
                         key={msg._id}
                         className={`flex ${msg.senderId === user?._id ? 'justify-end' : 'justify-start'}`}
