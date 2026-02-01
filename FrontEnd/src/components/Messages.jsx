@@ -7,8 +7,8 @@ import useGetRTM from '@/hooks/useGetRTM'
 import useGetAllMessage from '@/hooks/useGetAllMessages'
 
 const Messages = ({ selectedUser }) => {
+    useGetRTM(); 
     useGetAllMessage();
-    useGetRTM();
     const {messages} = useSelector(store=>store.chat);
     const {user} = useSelector(store=>store.auth);
 
@@ -28,7 +28,7 @@ const Messages = ({ selectedUser }) => {
 
             {/* Chat messages */}
             <div className='flex flex-col gap-3 flex-1 overflow-y-auto'>
-                {messages.map((msg) => (
+                {messages && messages.map((msg) => (
                     <div
                         key={msg._id}
                         className={`flex ${msg.senderId === user?._id ? 'justify-end' : 'justify-start'}`}
