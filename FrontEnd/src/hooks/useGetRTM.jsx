@@ -11,7 +11,7 @@ const useGetRTM = () => {
 
     const handleNewMessage = (newMessage) => {
       // dispatch(setMessages(prev => [...prev, newMessage]));
-      dispatch(setMessages([...messages, newMessage]));
+      dispatch(setMessages([...newMessage, newMessage]));
     };
 
     socket.on("newMessage", handleNewMessage);
