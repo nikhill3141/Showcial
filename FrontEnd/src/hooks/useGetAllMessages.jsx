@@ -12,7 +12,7 @@ const useGetAllMessage = () => {
             try {
                 const res = await axios.get(`https://insta-clone-td88.onrender.com/api/v1/message/all/${selectedUser._id}`, { withCredentials: true });
                 if (res.data.success) {  
-                    dispatch(setMessages(res.data.messages));
+                    dispatch(setMessages([...messages, res.data.messages]));
                 }
             } catch (error) {
                 console.log(error);
