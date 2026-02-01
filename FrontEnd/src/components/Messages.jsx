@@ -7,8 +7,8 @@ import useGetRTM from '@/hooks/useGetRTM'
 import useGetAllMessage from '@/hooks/useGetAllMessages'
 
 const Messages = ({ selectedUser }) => {
-    useGetRTM();
     useGetAllMessage();
+    useGetRTM();
     const {messages} = useSelector(store=>store.chat);
     const {user} = useSelector(store=>store.auth);
 
